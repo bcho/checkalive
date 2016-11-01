@@ -34,16 +34,20 @@ func TestCheckerSync(t *testing.T) {
 		t.Errorf("expect 1, got: %d", c)
 	}
 
-	if l := len(c.Report()); l != 2 {
+	counter, err := c.Reset()
+	if err != nil {
+		t.Errorf("unexpected error: %+v", err)
+	}
+	if l := len(counter); l != 2 {
 		t.Errorf("map size should be 2, got: %d", l)
 	}
 
-	if err := c.Reset(); err != nil {
+	counter, err = c.Reset()
+	if err != nil {
 		t.Errorf("unexpected error: %+v", err)
 	}
-
-	if l := len(c.Report()); l != 0 {
-		t.Errorf("map should be empty, got: %d", l)
+	if l := len(counter); l != 0 {
+		t.Errorf("map size should be 0, got: %d", l)
 	}
 }
 
@@ -91,11 +95,19 @@ func TestCheckerAsync(t *testing.T) {
 		t.Errorf("should ping 10 times, got: %d", c)
 	}
 
-	if err := c.Reset(); err != nil {
+	counter, err := c.Reset()
+	if err != nil {
 		t.Errorf("unexpected error: %+v", err)
 	}
+	if l := len(counter); l != 3 {
+		t.Errorf("map size should be 3, got: %d", l)
+	}
 
-	if l := len(c.Report()); l != 0 {
-		t.Errorf("map should be empty, got: %d", l)
+	counter, err = c.Reset()
+	if err != nil {
+		t.Errorf("unexpected error: %+v", err)
+	}
+	if l := len(counter); l != 0 {
+		t.Errorf("map size should be 0, got: %d", l)
 	}
 }
